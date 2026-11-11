@@ -873,16 +873,9 @@ h1 {
   margin: 0 2px 6px;
 }
 
-.results-meta {
-  flex: 1 1 auto;
-  color: var(--muted);
-  font-size: 12px;
-  font-variant-numeric: tabular-nums;
-}
-
 .results-head .pager {
   flex: 0 1 auto;
-  margin: 0;
+  margin: 0 0 0 auto;
   width: min(430px, 55%);
 }
 
@@ -3234,7 +3227,8 @@ function createField({ root, input, list, getFocus }) {
     });
     list.hidden = false;
     input.setAttribute('aria-expanded', 'true');
-    setActive(-1);
+    // The first option is what Enter chooses, so highlight it by default.
+    setActive(0);
   }
 
   function choose(index) {
@@ -3555,18 +3549,8 @@ function renderItineraries(itineraries, { focusKey = null } = {}) {
 
   resultsBox.replaceChildren();
 
-  const queryLabel = activeSearch?.timing
-    ? timingLabel(
-        activeSearch.timing.date,
-        activeSearch.timing.time,
-        activeSearch.timing.arriveBy,
-      )
-    : t('leavingNow');
   const head = el('div', 'results-head');
-  head.append(
-    el('h2', 'visually-hidden', t('resultsRoutes')),
-    el('span', 'results-meta', `${t('optionsCount', visible.length)} · ${queryLabel}`),
-  );
+  head.append(el('h2', 'visually-hidden', t('resultsRoutes')));
 
   const list = el('div', 'itinerary-list');
   for (const itinerary of visible) {
