@@ -470,6 +470,11 @@ h1 {
   opacity: 0.75;
 }
 
+#route-button {
+  height: 38px;
+  margin-bottom: 3px;
+}
+
 :is(button, input):focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
@@ -1152,6 +1157,10 @@ h1 {
   content: '·';
   margin-right: 6px;
   color: var(--muted);
+}
+
+.step.is-detail-wrapped .step-detail::before {
+  content: none;
 }
 
 .step-timing {
@@ -3580,6 +3589,16 @@ function updatePagerButtons() {
   }
 }
 
+function syncStepWrapping() {
+  for (const step of resultsBox.querySelectorAll('.step:not(.step-wait)')) {
+    const title = step.querySelector('.step-title');
+    const detail = step.querySelector('.step-detail');
+    if (!title || !detail) continue;
+    const wrapped = detail.getBoundingClientRect().top - title.getBoundingClientRect().top > 6;
+    step.classList.toggle('is-detail-wrapped', wrapped);
+  }
+}
+
 function renderItineraries(itineraries, { focusKey = null } = {}) {
   const visible = filterItinerariesByModes(itineraries);
   if (!visible.length) {
@@ -3602,6 +3621,7 @@ function renderItineraries(itineraries, { focusKey = null } = {}) {
   resultsBox.hidden = false;
   statusBox.hidden = true;
   updatePagerButtons();
+  syncStepWrapping();
 
   if (focusKey) {
     requestAnimationFrame(() => {
@@ -3696,6 +3716,10 @@ resultsBox.addEventListener('click', (event) => {
   const button = event.target.closest('.pager-button');
   if (!button || button.disabled) return;
   showMore(button.dataset.direction);
+});
+
+window.addEventListener('resize', () => {
+  requestAnimationFrame(syncStepWrapping);
 });
 
 // ---------------------------------------------------------------------------
