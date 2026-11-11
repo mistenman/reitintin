@@ -991,6 +991,8 @@ h1 {
   flex-wrap: wrap;
   align-items: center;
   align-self: center;
+  position: relative;
+  top: 0.05em;
   gap: 2px 6px;
   min-width: 0;
   margin: 0;
@@ -1916,6 +1918,10 @@ const I18N = {
     modeWalk: 'Walk',
     modeFunicular: 'Funicular',
     modeTransit: 'Transit',
+    railLine: (line) => `${line}-train`,
+    busLine: (line) => `Bus ${line}`,
+    tramLine: (line) => `Tram ${line}`,
+    ferryLine: (line) => `Ferry ${line}`,
     resultsRoutes: 'Routes',
     footerRouting: 'Routing:',
     footerGeocoding: 'Geocoding:',
@@ -2026,6 +2032,10 @@ const I18N = {
     modeWalk: 'Kävele',
     modeFunicular: 'Funikulaari',
     modeTransit: 'Joukkoliikenne',
+    railLine: (line) => `${line}-juna`,
+    busLine: (line) => `Bussi ${line}`,
+    tramLine: (line) => `Ratikka ${line}`,
+    ferryLine: (line) => `Lautta ${line}`,
     resultsRoutes: 'Reitit',
     footerRouting: 'Reititys:',
     footerGeocoding: 'Geokoodaus:',
@@ -3420,6 +3430,22 @@ function renderTransitDetail(leg) {
   return `${from}${platform ? t('platform', platform) : ''} → ${to}`;
 }
 
+/** Identify the service and its destination below the stop pair. */
+function renderTransitLine(leg, info) {
+  const mode = leg.route?.mode || leg.mode;
+  const line = leg.route?.shortName || leg.route?.longName || '';
+  const headsign = leg.trip?.tripHeadsign || '';
+  const withHeadsign = (label) => (headsign ? `${label} (${headsign})` : label);
+
+  if (!line) return headsign ? `→ ${headsign}` : info.label;
+  if (mode === 'RAIL') return withHeadsign(t('railLine', line));
+  if (mode === 'BUS') return withHeadsign(t('busLine', line));
+  if (mode === 'TRAM') return withHeadsign(t('tramLine', line));
+  if (mode === 'SUBWAY') return withHeadsign(line);
+  if (mode === 'FERRY') return withHeadsign(t('ferryLine', line));
+  return headsign ? `→ ${headsign}` : line;
+}
+
 function renderStep(leg) {
   const isWalk = leg.mode === 'WALK' || !leg.transitLeg;
   const step = el('li', 'step');
@@ -3441,8 +3467,7 @@ function renderStep(leg) {
 
     const title = el('div', 'step-title');
     title.append(document.createTextNode(renderTransitDetail(leg)));
-    const headsign = leg.trip?.tripHeadsign;
-    body.append(title, el('div', 'step-detail', headsign ? `→ ${headsign}` : info.label));
+    body.append(title, el('div', 'step-detail', renderTransitLine(leg, info)));
   }
 
   step.append(marker, body);
