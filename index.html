@@ -294,6 +294,10 @@ h1 {
 }
 
 .field-from input {
+  padding-right: 44px;
+}
+
+.field-from.has-clear input {
   padding-right: 80px;
 }
 
@@ -353,8 +357,12 @@ h1 {
   cursor: progress;
 }
 
-/* From has both the locate and clear actions, so locate sits left of clear. */
+/* The locate action takes the clear button's spot until there is text to clear. */
 .field-from .icon-button {
+  right: 6px;
+}
+
+.field-from.has-clear .icon-button {
   right: 42px;
 }
 
@@ -2008,7 +2016,7 @@ const I18N = {
     modeRail: 'Lähijuna',
     modeSubway: 'Metro',
     modeFerry: 'Lautta',
-    modeWalk: 'Kävely',
+    modeWalk: 'Kävele',
     modeFunicular: 'Funikulaari',
     modeTransit: 'Joukkoliikenne',
     resultsRoutes: 'Reitit',
@@ -2040,7 +2048,7 @@ const I18N = {
     departAtPrefix: 'lähtö klo',
     arriveByPrefix: 'perillä klo',
     onDatePrefix: '',
-    walk: 'Kävely',
+    walk: 'Kävele',
     walkTo: (destination) => `kohteeseen ${destination}`,
     walkToDestination: 'määränpäähän',
     platform: (code) => ` (laituri ${code})`,
@@ -3169,6 +3177,7 @@ function createField({ root, input, list, getFocus }) {
 
   function syncClear() {
     if (clearButton) clearButton.hidden = input.value.length === 0;
+    root.classList.toggle('has-clear', input.value.length > 0);
   }
 
   function clear() {
@@ -3424,10 +3433,10 @@ function renderStep(leg) {
     marker.append(badge);
 
     const title = el('div', 'step-title');
-    const headsign = leg.trip?.tripHeadsign;
-    title.append(document.createTextNode(headsign ? `→ ${headsign}` : info.label));
+    title.append(document.createTextNode(renderTransitDetail(leg)));
     if (leg.realTime) title.append(liveBadge(false));
-    body.append(title, el('div', 'step-detail', renderTransitDetail(leg)));
+    const headsign = leg.trip?.tripHeadsign;
+    body.append(title, el('div', 'step-detail', headsign ? `→ ${headsign}` : info.label));
   }
 
   step.append(marker, body);
@@ -3806,7 +3815,7 @@ locateButton.addEventListener('click', async () => {
   try {
     const selection = await locateSelection();
     fromField.setSelection(selection);
-    fromField.input.focus();
+    fromField.input.blur();
     statusBox.hidden = true;
   } catch (error) {
     showStatus(error.message, 'error');
