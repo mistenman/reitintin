@@ -15,7 +15,7 @@
       content="A fast, minimal journey planner for Helsinki region public transport."
     />
     <meta name="theme-color" content="#007ac9" />
-    <title>HSL Journey Planner</title>
+    <title>Reitintin</title>
     <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+CiAgPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iMTQiIGZpbGw9IiMwMDdhYzkiIC8+CiAgPHRleHQgeD0iMzIiIHk9IjQxIiBmb250LWZhbWlseT0ic3lzdGVtLXVpLCAtYXBwbGUtc3lzdGVtLCAnU2Vnb2UgVUknLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjI0IiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSIjZmZmZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5IU0w8L3RleHQ+Cjwvc3ZnPgo=">
       <style>
 :root {
@@ -172,7 +172,7 @@ h1 {
 }
 
 .key-settings {
-  margin-left: auto;
+  margin-left: 0;
   height: 28px;
   padding: 0 10px;
   border: 1px solid var(--border);
@@ -183,6 +183,47 @@ h1 {
   font-size: 12px;
   font-weight: 650;
   cursor: pointer;
+}
+
+.appbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.lang-switch {
+  display: inline-flex;
+  gap: 2px;
+  padding: 2px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--surface-muted);
+}
+
+.lang-button {
+  min-width: 30px;
+  height: 22px;
+  padding: 0 5px;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+}
+
+.lang-button[aria-pressed='true'] {
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.14);
+}
+
+.lang-button:hover:not([aria-pressed='true']) {
+  color: var(--accent);
 }
 
 .key-settings:hover {
@@ -201,7 +242,7 @@ h1 {
 
 .search-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 40px minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr) 40px minmax(0, 1fr) auto auto;
   gap: 8px;
   align-items: end;
 }
@@ -443,9 +484,6 @@ h1 {
   flex-wrap: wrap;
   align-items: center;
   gap: 6px 8px;
-  margin-top: 8px;
-  padding-top: 8px;
-  border-top: 1px solid var(--border);
 }
 
 .time-modes {
@@ -501,7 +539,7 @@ h1 {
 .date-input {
   height: 32px;
   max-width: 150px;
-  padding: 0 6px;
+  padding: 0 12px 0 10px;
   border: 1px solid var(--border);
   border-radius: 7px;
   background: var(--surface-muted);
@@ -575,11 +613,12 @@ h1 {
 .options-toggle {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  height: 32px;
-  padding: 0 9px;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
   border: 1px solid var(--border);
-  border-radius: 7px;
+  border-radius: 8px;
   background: var(--surface-muted);
   color: var(--muted);
   font: inherit;
@@ -589,8 +628,8 @@ h1 {
 }
 
 .options-toggle .icon {
-  width: 14px;
-  height: 14px;
+  width: 18px;
+  height: 18px;
 }
 
 .options-toggle:hover {
@@ -613,7 +652,7 @@ h1 {
 }
 
 .options-panel:not([hidden]) {
-  animation: options-in 140ms ease;
+  animation: none;
 }
 
 @keyframes options-in {
@@ -1273,7 +1312,7 @@ h1 {
 
   .brand-mark {
     height: 24px;
-    font-size: 11px;
+    font-size: 12px;
   }
 
   .search {
@@ -1281,11 +1320,11 @@ h1 {
   }
 
   .search-grid {
-    grid-template-columns: 44px minmax(0, 1fr);
+    grid-template-columns: 44px minmax(0, 1fr) 44px;
     grid-template-areas:
-      'from from'
-      'to to'
-      'swap route';
+      'from from from'
+      'to to to'
+      'swap route options';
     gap: 8px;
   }
 
@@ -1307,6 +1346,10 @@ h1 {
     width: 100%;
   }
 
+  .options-toggle {
+    grid-area: options;
+  }
+
   .time-mode {
     flex: 1 1 0;
     min-height: 20px;
@@ -1317,7 +1360,6 @@ h1 {
     flex: 1 1 100%;
   }
 
-  .options-toggle,
   .mode-toggle,
   .options-select {
     height: 40px;
@@ -1413,12 +1455,6 @@ h1 {
 }
 
 @media (max-width: 360px) {
-  .options-toggle {
-    width: 40px;
-    padding: 0;
-    justify-content: center;
-  }
-
   .step-detail {
     font-size: 12px;
   }
@@ -1483,22 +1519,46 @@ h1 {
     <div class="page">
       <header class="appbar">
         <div class="brand">
-          <span class="brand-mark">HSL</span>
-          <h1>Journey planner</h1>
+          <span class="brand-mark">Reitintin</span>
         </div>
-        <button type="button" id="key-settings" class="key-settings" hidden>API key</button>
+        <div class="appbar-actions">
+          <div class="lang-switch" role="group" aria-label="Kieli" data-i18n-aria-label="language">
+            <button
+              type="button"
+              class="lang-button is-active"
+              data-lang="fi"
+              aria-pressed="true"
+              lang="fi"
+            >
+              FI
+            </button>
+            <button
+              type="button"
+              class="lang-button"
+              data-lang="en"
+              aria-pressed="false"
+              lang="en"
+            >
+              EN
+            </button>
+          </div>
+          <button type="button" id="key-settings" class="key-settings" hidden data-i18n="apiKey">
+            API-avain
+          </button>
+        </div>
       </header>
 
       <form id="search-form" class="search" novalidate>
         <div class="search-grid">
           <div class="field field-from" id="from-field">
-            <label for="from">From</label>
+            <label for="from" data-i18n="fromLabel">MISTÄ</label>
             <div class="input-wrap">
               <input
                 id="from"
                 name="from"
                 type="text"
-                placeholder="Address or stop"
+                placeholder="Osoite tai pysäkki"
+                data-i18n-placeholder="fromPlaceholder"
                 autocomplete="off"
                 spellcheck="false"
                 role="combobox"
@@ -1513,8 +1573,10 @@ h1 {
                 type="button"
                 class="icon-button"
                 id="locate"
-                title="Use GPS location"
-                aria-label="Use GPS location"
+                title="Käytä GPS-sijaintia"
+                aria-label="Käytä GPS-sijaintia"
+                data-i18n-title="useGps"
+                data-i18n-aria-label="useGps"
               >
                 <svg class="icon" aria-hidden="true"><use href="#icon-locate" /></svg>
               </button>
@@ -1522,8 +1584,10 @@ h1 {
                 type="button"
                 class="clear-button"
                 data-clear="from"
-                aria-label="Clear From"
-                title="Clear From"
+                aria-label="Tyhjennä MISTÄ"
+                title="Tyhjennä MISTÄ"
+                data-i18n-aria-label="clearFrom"
+                data-i18n-title="clearFrom"
                 hidden
               >
                 <svg class="icon" aria-hidden="true"><use href="#icon-clear" /></svg>
@@ -1536,20 +1600,23 @@ h1 {
             type="button"
             class="swap"
             id="swap"
-            title="Swap origin and destination"
-            aria-label="Swap origin and destination"
+            title="Vaihda lähtö ja määränpää"
+            aria-label="Vaihda lähtö ja määränpää"
+            data-i18n-title="swapTitle"
+            data-i18n-aria-label="swapTitle"
           >
             <svg class="icon" aria-hidden="true"><use href="#icon-swap" /></svg>
           </button>
 
           <div class="field field-to" id="to-field">
-            <label for="to">To</label>
+            <label for="to" data-i18n="toLabel">MIHIN</label>
             <div class="input-wrap">
               <input
                 id="to"
                 name="to"
                 type="text"
-                placeholder="Destination or address"
+                placeholder="Määränpää tai osoite"
+                data-i18n-placeholder="toPlaceholder"
                 autocomplete="off"
                 spellcheck="false"
                 role="combobox"
@@ -1563,8 +1630,10 @@ h1 {
                 type="button"
                 class="clear-button"
                 data-clear="to"
-                aria-label="Clear To"
-                title="Clear To"
+                aria-label="Tyhjennä MIHIN"
+                title="Tyhjennä MIHIN"
+                data-i18n-aria-label="clearTo"
+                data-i18n-title="clearTo"
                 hidden
               >
                 <svg class="icon" aria-hidden="true"><use href="#icon-clear" /></svg>
@@ -1573,98 +1642,130 @@ h1 {
             <ul id="to-suggestions" class="suggestions" role="listbox" hidden></ul>
           </div>
 
-          <button type="submit" class="route-button" id="route-button">Route</button>
-        </div>
-
-        <div class="time-row">
-          <div class="time-modes" role="group" aria-label="Travel time">
-            <button
-              type="button"
-              class="time-mode is-active"
-              data-time-mode="now"
-              aria-pressed="true"
-            >
-              Now
-            </button>
-            <button type="button" class="time-mode" data-time-mode="depart" aria-pressed="false">
-              Depart at
-            </button>
-            <button type="button" class="time-mode" data-time-mode="arrive" aria-pressed="false">
-              Arrive at
-            </button>
-          </div>
-          <select id="date-input" class="date-input" aria-label="Travel date">
-            <option>Today</option>
-          </select>
-          <input
-            id="time-input"
-            class="time-input"
-            type="text"
-            inputmode="numeric"
-            autocomplete="off"
-            spellcheck="false"
-            placeholder="HHMM"
-            aria-label="Departure or arrival time, 24-hour, four digits"
-          />
+          <button type="submit" class="route-button" id="route-button" data-i18n="route">
+            Etsi reitti
+          </button>
           <button
             type="button"
             class="options-toggle"
             id="options-toggle"
             aria-expanded="false"
             aria-controls="options-panel"
-            aria-label="Search options"
-            title="Search options"
+            aria-label="Hakuasetukset"
+            title="Hakuasetukset"
+            data-i18n-aria-label="searchOptions"
+            data-i18n-title="searchOptions"
           >
             <svg class="icon" aria-hidden="true"><use href="#icon_options" /></svg>
           </button>
         </div>
-        <p id="time-warning" class="time-warning" role="status" hidden>
-          This selected time has already passed.
-        </p>
 
         <div id="options-panel" class="options-panel" hidden>
+          <div class="time-row">
+            <div class="time-modes" role="group" aria-label="Matka-aika" data-i18n-aria-label="travelTime">
+              <button
+                type="button"
+                class="time-mode is-active"
+                data-time-mode="now"
+                aria-pressed="true"
+                data-i18n="now"
+              >
+                Nyt
+              </button>
+              <button
+                type="button"
+                class="time-mode"
+                data-time-mode="depart"
+                aria-pressed="false"
+                data-i18n="departAt"
+              >
+                Lähtö
+              </button>
+              <button
+                type="button"
+                class="time-mode"
+                data-time-mode="arrive"
+                aria-pressed="false"
+                data-i18n="arriveAt"
+              >
+                Perillä
+              </button>
+            </div>
+            <select
+              id="date-input"
+              class="date-input"
+              aria-label="Matkapäivä"
+              data-i18n-aria-label="travelDate"
+            >
+              <option>Tänään</option>
+            </select>
+            <input
+              id="time-input"
+              class="time-input"
+              type="text"
+              inputmode="numeric"
+              autocomplete="off"
+              spellcheck="false"
+              placeholder="HHMM"
+              aria-label="Lähtö- tai saapumisaika, 24 tunnin muodossa, neljä numeroa"
+              data-i18n-aria-label="timeInputLabel"
+            />
+          </div>
+          <p id="time-warning" class="time-warning" role="status" hidden data-i18n="timeWarning">
+            Valittu aika on jo mennyt.
+          </p>
           <div class="option-row">
-            <label class="option-label" for="walk-speed">Walking speed</label>
+            <label class="option-label" for="walk-speed" data-i18n="optionsWalkingSpeed">
+              Kävelynopeus
+            </label>
             <select id="walk-speed" class="options-select">
-              <option value="2.5">Slow 2.5 km/h</option>
-              <option value="3.5">Calm 3.5 km/h</option>
-              <option value="4.6" selected>Average 4.6 km/h</option>
-              <option value="6.0">Prompt 6.0 km/h</option>
-              <option value="8.0">Fast 8.0 km/h</option>
+              <option value="2.5">Hidas 2.5 km/h</option>
+              <option value="3.5">Rauhallinen 3.5 km/h</option>
+              <option value="4.6" selected>Keskimääräinen 4.6 km/h</option>
+              <option value="6.0">Ripeä 6.0 km/h</option>
+              <option value="8.0">Nopea 8.0 km/h</option>
             </select>
           </div>
           <div class="option-row">
-            <span class="option-label">Transit modes</span>
-            <div class="mode-buttons" role="group" aria-label="Transit modes">
+            <span class="option-label" data-i18n="optionsTransitModes">Kulkumuodot</span>
+            <div
+              class="mode-buttons"
+              role="group"
+              aria-label="Kulkumuodot"
+              data-i18n-aria-label="optionsTransitModes"
+            >
               <button
                 type="button"
                 class="mode-toggle"
                 data-mode="BUS"
                 aria-pressed="true"
-                title="Bus"
+                title="Bussi"
+                data-i18n-title="modeBus"
               >
                 <svg class="mode-icon" aria-hidden="true"><use href="#icon_bus" /></svg>
-                <span>Bus</span>
+                <span data-i18n="modeBus">Bussi</span>
               </button>
               <button
                 type="button"
                 class="mode-toggle"
                 data-mode="TRAM"
                 aria-pressed="true"
-                title="Tram"
+                title="Raitiovaunu"
+                data-i18n-title="modeTram"
               >
                 <svg class="mode-icon" aria-hidden="true"><use href="#icon_tram" /></svg>
-                <span>Tram</span>
+                <span data-i18n="modeTram">Raitiovaunu</span>
               </button>
               <button
                 type="button"
                 class="mode-toggle"
                 data-mode="RAIL"
                 aria-pressed="true"
-                title="Commuter train"
+                title="Lähijuna"
+                data-i18n-title="modeRail"
               >
                 <svg class="mode-icon" aria-hidden="true"><use href="#icon_rail" /></svg>
-                <span>Commuter train</span>
+                <span data-i18n="modeRail">Lähijuna</span>
               </button>
               <button
                 type="button"
@@ -1672,35 +1773,43 @@ h1 {
                 data-mode="SUBWAY"
                 aria-pressed="true"
                 title="Metro"
+                data-i18n-title="modeSubway"
               >
                 <svg class="mode-icon" aria-hidden="true"><use href="#icon_subway" /></svg>
-                <span>Metro</span>
+                <span data-i18n="modeSubway">Metro</span>
               </button>
             </div>
           </div>
         </div>
       </form>
 
-      <p id="from-hint" class="visually-hidden">
-        Leave “From” empty to use GPS.
+      <p id="from-hint" class="visually-hidden" data-i18n="gpsHint">
+        Jätä MISTÄ tyhjäksi, niin sijaintisi haetaan.
       </p>
 
       <section id="status" class="status" role="status" aria-live="polite" hidden></section>
-      <section id="results" class="results" aria-label="Routes" hidden></section>
+      <section
+        id="results"
+        class="results"
+        aria-label="Reitit"
+        data-i18n-aria-label="resultsRoutes"
+        hidden
+      ></section>
 
       <footer class="footer">
         <p>
-          Routing: <a href="https://digitransit.fi" target="_blank" rel="noreferrer">Digitransit</a>
-          (HSL) · Geocoding: OpenStreetMap.
+          <span data-i18n="footerRouting">Reititys:</span>
+          <a href="https://digitransit.fi" target="_blank" rel="noreferrer">Digitransit</a>
+          (HSL) · <span data-i18n="footerGeocoding">Geokoodaus:</span> OpenStreetMap.
         </p>
       </footer>
     </div>
 
     <dialog id="key-dialog" class="key-dialog" aria-labelledby="key-title">
       <form id="key-form" novalidate>
-        <h2 id="key-title">Digitransit API key</h2>
+        <h2 id="key-title" data-i18n="apiKeyTitle">Digitransit API -avain</h2>
         <p id="key-help" class="key-help">
-          Create a key at
+          <span data-i18n="createKeyAt">Luo avain osoitteessa</span>
           <a href="https://portal-api.digitransit.fi/" target="_blank" rel="noreferrer">
             portal-api.digitransit.fi
           </a>.
@@ -1711,20 +1820,24 @@ h1 {
           autocomplete="off"
           autocapitalize="off"
           spellcheck="false"
-          placeholder="Paste API key here"
-          aria-label="API key"
+          placeholder="Liitä API-avain tähän"
+          data-i18n-placeholder="keyPlaceholder"
+          aria-label="API-avain"
+          data-i18n-aria-label="keyInputLabel"
           aria-describedby="key-help"
         />
         <p id="key-error" class="key-error" role="alert" hidden></p>
         <div class="key-actions">
-          <button type="button" id="key-cancel" class="key-cancel">Cancel</button>
-          <button type="submit" class="key-save">Save key</button>
+          <button type="button" id="key-cancel" class="key-cancel" data-i18n="cancel">
+            Peruuta
+          </button>
+          <button type="submit" class="key-save" data-i18n="saveKey">Tallenna avain</button>
         </div>
       </form>
     </dialog>
 
     <noscript>
-      <p class="noscript">This journey planner needs JavaScript to search for routes.</p>
+      <p class="noscript">Reittiopas tarvitsee JavaScriptin reittien hakemiseen.</p>
     </noscript>
       <script>window.__HSL_STANDALONE__ = true</script>
     <script type="module">
@@ -1748,14 +1861,273 @@ const SUGGESTION_LIMIT = 6;
 const TOGGLEABLE_TRANSIT_MODES = new Set(['BUS', 'TRAM', 'RAIL', 'SUBWAY']);
 const DEFAULT_TRANSIT_MODES = ['BUS', 'TRAM', 'RAIL', 'SUBWAY'];
 
+const LANG_STORAGE = 'hsl-journey-planner:lang';
+const SPEED_OPTIONS = [
+  ['2.5', 'speedSlow'],
+  ['3.5', 'speedCalm'],
+  ['4.6', 'speedAverage'],
+  ['6.0', 'speedPrompt'],
+  ['8.0', 'speedFast'],
+];
+
+const I18N = {
+  en: {
+    apiKey: 'API key',
+    apiKeyTitle: 'Digitransit API key',
+    createKeyAt: 'Create a key at',
+    keyPlaceholder: 'Paste API key here',
+    keyInputLabel: 'API key',
+    cancel: 'Cancel',
+    saveKey: 'Save key',
+    keyRequired: 'Paste your Digitransit subscription key.',
+    swapTitle: 'Swap origin and destination',
+    useGps: 'Use GPS location',
+    clearFrom: 'Clear From',
+    clearTo: 'Clear To',
+    fromLabel: 'FROM',
+    toLabel: 'TO',
+    fromPlaceholder: 'Address or stop',
+    toPlaceholder: 'Destination or address',
+    route: 'Route',
+    routing: 'Routing…',
+    searchOptions: 'Search options',
+    travelTime: 'Travel time',
+    travelDate: 'Travel date',
+    timeInputLabel: 'Departure or arrival time, 24-hour, four digits',
+    timeWarning: 'This selected time has already passed.',
+    now: 'Now',
+    departAt: 'Depart at',
+    arriveAt: 'Arrive at',
+    optionsWalkingSpeed: 'Walking speed',
+    optionsTransitModes: 'Transit modes',
+    modeBus: 'Bus',
+    modeTram: 'Tram',
+    modeRail: 'Commuter train',
+    modeSubway: 'Metro',
+    modeFerry: 'Ferry',
+    modeWalk: 'Walk',
+    modeFunicular: 'Funicular',
+    modeTransit: 'Transit',
+    resultsRoutes: 'Routes',
+    footerRouting: 'Routing:',
+    footerGeocoding: 'Geocoding:',
+    gpsHint: 'Leave “From” empty to use GPS.',
+    noscript: 'This journey planner needs JavaScript to search for routes.',
+    language: 'Language',
+    speedSlow: 'Slow',
+    speedCalm: 'Calm',
+    speedAverage: 'Average',
+    speedPrompt: 'Prompt',
+    speedFast: 'Fast',
+    today: 'Today',
+    tomorrowOption: 'Tomorrow',
+    tomorrowLabel: 'tomorrow',
+    yesterday: 'Yesterday',
+    unknownPlace: 'Unknown place',
+    layerAddress: 'Address',
+    layerVenue: 'Place',
+    layerStreet: 'Street',
+    layerStop: 'Stop',
+    layerStation: 'Station',
+    layerNeighbourhood: 'Area',
+    layerLocality: 'City',
+    layerRegion: 'Region',
+    layerCountry: 'Country',
+    leavingNow: 'leaving now',
+    departAtPrefix: 'depart at',
+    arriveByPrefix: 'arrive by',
+    onDatePrefix: 'on ',
+    walk: 'Walk',
+    walkTo: (destination) => `to ${destination}`,
+    walkToDestination: 'to destination',
+    platform: (code) => ` (platform ${code})`,
+    stopFallback: 'Stop',
+    waitAt: (duration, stop) => (stop ? `Wait ${duration} at ${stop}` : `Wait ${duration}`),
+    liveTitle: 'Includes real-time data',
+    liveAria: 'Real-time data',
+    liveLabel: 'Live',
+    optionsCount: (count) => `${count} ${count === 1 ? 'option' : 'options'}`,
+    noModeMatch: 'No routes match the selected transit modes. Enable another mode or press Route.',
+    showEarlier: '← Show earlier departures',
+    showLater: 'Show later departures →',
+    noEarlier: 'No earlier departures',
+    noLater: 'No later departures',
+    earlierAria: 'Show earlier departures',
+    laterAria: 'Show later departures',
+    atEnd: (verb) => `${verb} at the end of the list`,
+    enterDestination: 'Enter where you want to go.',
+    findingLocations: 'Finding locations…',
+    gettingLocation: 'Getting your location…',
+    planningRoute: 'Planning route…',
+    noRoutesFound: 'No routes found for this trip. Try a nearby address or a different time.',
+    addApiKey: 'Add your Digitransit API key to search.',
+    errorTimeFormat: 'Enter a time as HH:MM, or switch to “Now”.',
+    errorChooseDate: 'Choose a travel date.',
+    notFound: (text) =>
+      `Couldn't find “${text}” in the HSL area. Try a more specific address.`,
+    samePlace: 'Origin and destination are the same place.',
+    routingFailed: (message) => `Routing failed: ${message}`,
+    routingFailedFallback: 'Routing failed.',
+    timeout: 'The Digitransit API did not respond. Please try again.',
+    networkDirect: 'Network error. Check your connection and try again.',
+    networkProxy: 'Network error. Is the server running?',
+    authRejected: 'Digitransit rejected the API key. Check it and try again.',
+    rateLimit: 'The Digitransit rate limit was reached. Try again in a moment.',
+    httpApi: (status) => `The Digitransit API returned HTTP ${status}.`,
+    httpRequest: (status) => `Request failed (HTTP ${status}).`,
+    geoUnavailable:
+      'Geolocation is not available in this browser. Type a starting point instead.',
+    geoDenied: 'Location permission was denied. Type a starting point instead.',
+    geoFailed: 'Could not determine your location. Type a starting point instead.',
+    geoOutside: 'Your current location is outside the HSL area. Type a starting point instead.',
+  },
+  fi: {
+    apiKey: 'API-avain',
+    apiKeyTitle: 'Digitransit API -avain',
+    createKeyAt: 'Luo avain osoitteessa',
+    keyPlaceholder: 'Liitä API-avain tähän',
+    keyInputLabel: 'API-avain',
+    cancel: 'Peruuta',
+    saveKey: 'Tallenna avain',
+    keyRequired: 'Liitä Digitransit-tilausavain.',
+    swapTitle: 'Vaihda lähtö ja määränpää',
+    useGps: 'Käytä GPS-sijaintia',
+    clearFrom: 'Tyhjennä MISTÄ',
+    clearTo: 'Tyhjennä MIHIN',
+    fromLabel: 'MISTÄ',
+    toLabel: 'MIHIN',
+    fromPlaceholder: 'Osoite tai pysäkki',
+    toPlaceholder: 'Määränpää tai osoite',
+    route: 'Etsi reitti',
+    routing: 'Haetaan reittiä…',
+    searchOptions: 'Hakuasetukset',
+    travelTime: 'Matka-aika',
+    travelDate: 'Matkapäivä',
+    timeInputLabel: 'Lähtö- tai saapumisaika, 24 tunnin muodossa, neljä numeroa',
+    timeWarning: 'Valittu aika on jo mennyt.',
+    now: 'Nyt',
+    departAt: 'Lähtö',
+    arriveAt: 'Perillä',
+    optionsWalkingSpeed: 'Kävelynopeus',
+    optionsTransitModes: 'Kulkumuodot',
+    modeBus: 'Bussi',
+    modeTram: 'Raitiovaunu',
+    modeRail: 'Lähijuna',
+    modeSubway: 'Metro',
+    modeFerry: 'Lautta',
+    modeWalk: 'Kävely',
+    modeFunicular: 'Funikulaari',
+    modeTransit: 'Joukkoliikenne',
+    resultsRoutes: 'Reitit',
+    footerRouting: 'Reititys:',
+    footerGeocoding: 'Geokoodaus:',
+    gpsHint: 'Jätä MISTÄ tyhjäksi, niin sijaintisi haetaan.',
+    noscript: 'Reittiopas tarvitsee JavaScriptin reittien hakemiseen.',
+    language: 'Kieli',
+    speedSlow: 'Hidas',
+    speedCalm: 'Rauhallinen',
+    speedAverage: 'Keskimääräinen',
+    speedPrompt: 'Ripeä',
+    speedFast: 'Nopea',
+    today: 'Tänään',
+    tomorrowOption: 'Huomenna',
+    tomorrowLabel: 'huomenna',
+    yesterday: 'Eilen',
+    unknownPlace: 'Tuntematon paikka',
+    layerAddress: 'Osoite',
+    layerVenue: 'Paikka',
+    layerStreet: 'Katu',
+    layerStop: 'Pysäkki',
+    layerStation: 'Asema',
+    layerNeighbourhood: 'Alue',
+    layerLocality: 'Kaupunki',
+    layerRegion: 'Maakunta',
+    layerCountry: 'Maa',
+    leavingNow: 'lähtee nyt',
+    departAtPrefix: 'lähtö klo',
+    arriveByPrefix: 'perillä klo',
+    onDatePrefix: '',
+    walk: 'Kävely',
+    walkTo: (destination) => `kohteeseen ${destination}`,
+    walkToDestination: 'määränpäähän',
+    platform: (code) => ` (laituri ${code})`,
+    stopFallback: 'Pysäkki',
+    waitAt: (duration, stop) => (stop ? `Odota ${duration} · ${stop}` : `Odota ${duration}`),
+    liveTitle: 'Sisältää reaaliaikatietoa',
+    liveAria: 'Reaaliaikatieto',
+    liveLabel: 'Live',
+    optionsCount: (count) => `${count} ${count === 1 ? 'vaihtoehto' : 'vaihtoehtoa'}`,
+    noModeMatch:
+      'Valituilla kulkumuodoilla ei löytynyt reittejä. Ota toinen kulkumuoto käyttöön tai paina Etsi reitti.',
+    showEarlier: '← Näytä aiemmat lähdöt',
+    showLater: 'Näytä myöhemmät lähdöt →',
+    noEarlier: 'Ei aiempia lähtöjä',
+    noLater: 'Ei myöhempiä lähtöjä',
+    earlierAria: 'Näytä aiemmat lähdöt',
+    laterAria: 'Näytä myöhemmät lähdöt',
+    atEnd: (verb) => `${verb} listan lopussa`,
+    enterDestination: 'Anna määränpää.',
+    findingLocations: 'Haetaan paikkoja…',
+    gettingLocation: 'Haetaan sijaintiasi…',
+    planningRoute: 'Suunnitellaan reittiä…',
+    noRoutesFound: 'Reittejä ei löytynyt. Kokeile lähellä olevaa osoitetta tai toista ajankohtaa.',
+    addApiKey: 'Lisää Digitransit API -avain hakuun.',
+    errorTimeFormat: 'Anna aika muodossa HH:MM tai vaihda Nyt-tilaan.',
+    errorChooseDate: 'Valitse matkapäivä.',
+    notFound: (text) =>
+      `Paikkaa “${text}” ei löytynyt HSL-alueelta. Kokeile tarkempaa osoitetta.`,
+    samePlace: 'Lähtö- ja määränpää ovat sama paikka.',
+    routingFailed: (message) => `Reititys epäonnistui: ${message}`,
+    routingFailedFallback: 'Reititys epäonnistui.',
+    timeout: 'Digitransit API ei vastannut. Yritä uudelleen.',
+    networkDirect: 'Verkkovirhe. Tarkista yhteys ja yritä uudelleen.',
+    networkProxy: 'Verkkovirhe. Onko palvelin käynnissä?',
+    authRejected: 'Digitransit hylkäsi API-avaimen. Tarkista avain ja yritä uudelleen.',
+    rateLimit: 'Digitransitin pyyntöraja tuli vastaan. Yritä hetken kuluttua uudelleen.',
+    httpApi: (status) => `Digitransit API palautti HTTP ${status}.`,
+    httpRequest: (status) => `Pyyntö epäonnistui (HTTP ${status}).`,
+    geoUnavailable: 'Sijainti ei ole käytettävissä tässä selaimessa. Kirjoita lähtöpaikka.',
+    geoDenied: 'Sijaintilupa evättiin. Kirjoita lähtöpaikka.',
+    geoFailed: 'Sijaintia ei voitu määrittää. Kirjoita lähtöpaikka.',
+    geoOutside: 'Sijaintisi on HSL-alueen ulkopuolella. Kirjoita lähtöpaikka.',
+  },
+};
+
+function readStoredLang() {
+  try {
+    const value = localStorage.getItem(LANG_STORAGE);
+    if (value === 'fi' || value === 'en') return value;
+  } catch {
+    // Storage can be unavailable; Finnish remains the default.
+  }
+  return 'fi';
+}
+
+let lang = readStoredLang();
+
+function t(key, ...args) {
+  const table = I18N[lang] || I18N.fi;
+  const value = table[key] ?? I18N.en[key] ?? key;
+  return typeof value === 'function' ? value(...args) : value;
+}
+
+function makeWeekdayFormatter(locale) {
+  return new Intl.DateTimeFormat(locale === 'fi' ? 'fi-FI' : 'en-GB', {
+    timeZone: 'Europe/Helsinki',
+    weekday: 'short',
+    day: 'numeric',
+    month: 'short',
+  });
+}
+
 const MODES = {
-  BUS: { label: 'Bus', className: 'mode-bus' },
-  TRAM: { label: 'Tram', className: 'mode-tram' },
-  RAIL: { label: 'Train', className: 'mode-rail' },
-  SUBWAY: { label: 'Metro', className: 'mode-subway' },
-  FERRY: { label: 'Ferry', className: 'mode-ferry' },
-  WALK: { label: 'Walk', className: 'mode-other' },
-  FUNICULAR: { label: 'Funicular', className: 'mode-other' },
+  BUS: { key: 'modeBus', className: 'mode-bus' },
+  TRAM: { key: 'modeTram', className: 'mode-tram' },
+  RAIL: { key: 'modeRail', className: 'mode-rail' },
+  SUBWAY: { key: 'modeSubway', className: 'mode-subway' },
+  FERRY: { key: 'modeFerry', className: 'mode-ferry' },
+  WALK: { key: 'modeWalk', className: 'mode-other' },
+  FUNICULAR: { key: 'modeFunicular', className: 'mode-other' },
 };
 
 const timeFormatter = new Intl.DateTimeFormat('en-GB', {
@@ -1773,12 +2145,7 @@ const queryTimeFormatter = new Intl.DateTimeFormat('en-GB', {
   hourCycle: 'h23',
 });
 
-const weekdayFormatter = new Intl.DateTimeFormat('en-GB', {
-  timeZone: 'Europe/Helsinki',
-  weekday: 'short',
-  day: 'numeric',
-  month: 'short',
-});
+let weekdayFormatter = makeWeekdayFormatter(lang);
 
 const dayFormatter = new Intl.DateTimeFormat('en-CA', {
   timeZone: 'Europe/Helsinki',
@@ -1854,13 +2221,14 @@ function relativeDayLabel(ms) {
   const today = dayFormatter.format(new Date());
   const day = dayFormatter.format(new Date(value));
   if (day === today) return '';
-  if (day === addDays(today, 1)) return 'Tomorrow';
-  if (day === addDays(today, -1)) return 'Yesterday';
+  if (day === addDays(today, 1)) return t('tomorrowOption');
+  if (day === addDays(today, -1)) return t('yesterday');
   return weekdayFormatter.format(new Date(value));
 }
 
 function modeInfo(mode) {
-  return MODES[mode] || { label: 'Transit', className: 'mode-other' };
+  const info = MODES[mode] || { key: 'modeTransit', className: 'mode-other' };
+  return { label: t(info.key), className: info.className };
 }
 
 // ---------------------------------------------------------------------------
@@ -1988,7 +2356,7 @@ function cacheSet(key, value, ttlMs) {
 
 function directHeaders(extra = {}) {
   if (!apiKey) {
-    throw new ApiError('Add your Digitransit API key to search.', 'NO_KEY');
+    throw new ApiError(t('addApiKey'), 'NO_KEY');
   }
   return { 'digitransit-subscription-key': apiKey, ...extra };
 }
@@ -2008,9 +2376,9 @@ async function directJson(url, options = {}, signal) {
   } catch (error) {
     if (signal?.aborted) throw error;
     if (error.name === 'AbortError') {
-      throw new ApiError('The Digitransit API did not respond. Please try again.', 'TIMEOUT');
+      throw new ApiError(t('timeout'), 'TIMEOUT');
     }
-    throw new ApiError('Network error. Check your connection and try again.', 'NETWORK');
+    throw new ApiError(t('networkDirect'), 'NETWORK');
   } finally {
     clearTimeout(timer);
     signal?.removeEventListener('abort', forwardAbort);
@@ -2025,13 +2393,13 @@ async function directJson(url, options = {}, signal) {
 
   if (!response.ok) {
     if (response.status === 401 || response.status === 403) {
-      throw new ApiError('Digitransit rejected the API key. Check it and try again.', 'AUTH');
+      throw new ApiError(t('authRejected'), 'AUTH');
     }
     if (response.status === 429) {
-      throw new ApiError('The Digitransit rate limit was reached. Try again in a moment.', 'RATE');
+      throw new ApiError(t('rateLimit'), 'RATE');
     }
     throw new ApiError(
-      data?.error || `The Digitransit API returned HTTP ${response.status}.`,
+      data?.error || t('httpApi', response.status),
       'HTTP',
     );
   }
@@ -2039,15 +2407,15 @@ async function directJson(url, options = {}, signal) {
 }
 
 const LAYER_LABELS = {
-  address: 'Address',
-  venue: 'Place',
-  street: 'Street',
-  stop: 'Stop',
-  station: 'Station',
-  neighbourhood: 'Area',
-  locality: 'City',
-  region: 'Region',
-  country: 'Country',
+  address: 'layerAddress',
+  venue: 'layerVenue',
+  street: 'layerStreet',
+  stop: 'layerStop',
+  station: 'layerStation',
+  neighbourhood: 'layerNeighbourhood',
+  locality: 'layerLocality',
+  region: 'layerRegion',
+  country: 'layerCountry',
 };
 
 function normaliseFeature(feature) {
@@ -2057,10 +2425,10 @@ function normaliseFeature(feature) {
   const [lon, lat] = coordinates.map(Number);
   if (!Number.isFinite(lat) || !Number.isFinite(lon)) return null;
   return {
-    label: properties.label || properties.name || 'Unknown place',
-    name: properties.name || properties.label || 'Unknown place',
+    label: properties.label || properties.name || t('unknownPlace'),
+    name: properties.name || properties.label || t('unknownPlace'),
     layer: properties.layer || '',
-    kind: LAYER_LABELS[properties.layer] || '',
+    kind: LAYER_LABELS[properties.layer] ? t(LAYER_LABELS[properties.layer]) : '',
     locality: properties.locality || '',
     localadmin: properties.localadmin || '',
     lat,
@@ -2233,7 +2601,7 @@ async function directPlan(from, to, timing = {}, options = {}) {
     start.lat.toFixed(5) === end.lat.toFixed(5) &&
     start.lon.toFixed(5) === end.lon.toFixed(5)
   ) {
-    throw new ApiError('Origin and destination are the same place.', 'SAME');
+    throw new ApiError(t('samePlace'), 'SAME');
   }
 
   const variables = {
@@ -2258,7 +2626,10 @@ async function directPlan(from, to, timing = {}, options = {}) {
   });
 
   if (Array.isArray(json?.errors) && json.errors.length) {
-    throw new ApiError(`Routing failed: ${json.errors[0]?.message || 'Routing failed.'}`, 'ROUTING');
+    throw new ApiError(
+      t('routingFailed', json.errors[0]?.message || t('routingFailedFallback')),
+      'ROUTING',
+    );
   }
   return { itineraries: json?.data?.plan?.itineraries ?? [] };
 }
@@ -2269,7 +2640,7 @@ async function proxyJson(pathname, options, signal) {
     response = await fetch(pathname, { ...options, signal });
   } catch (error) {
     if (error.name === 'AbortError') throw error;
-    throw new ApiError('Network error. Is the server running?', 'NETWORK');
+    throw new ApiError(t('networkProxy'), 'NETWORK');
   }
 
   let data = null;
@@ -2280,7 +2651,7 @@ async function proxyJson(pathname, options, signal) {
   }
 
   if (!response.ok) {
-    throw new ApiError(data?.error || `Request failed (HTTP ${response.status}).`, 'HTTP');
+    throw new ApiError(data?.error || t('httpRequest', response.status), 'HTTP');
   }
   return data;
 }
@@ -2341,7 +2712,7 @@ async function reverseLabel(lat, lon) {
 function getPosition() {
   return new Promise((resolve, reject) => {
     if (!navigator.geolocation) {
-      reject(new Error('Geolocation is not available in this browser. Type a starting point instead.'));
+      reject(new Error(t('geoUnavailable')));
       return;
     }
     navigator.geolocation.getCurrentPosition(
@@ -2349,9 +2720,7 @@ function getPosition() {
       (error) => {
         reject(
           new Error(
-            error.code === error.PERMISSION_DENIED
-              ? 'Location permission was denied. Type a starting point instead.'
-              : 'Could not determine your location. Type a starting point instead.',
+            error.code === error.PERMISSION_DENIED ? t('geoDenied') : t('geoFailed'),
           ),
         );
       },
@@ -2364,9 +2733,7 @@ async function locateSelection() {
   const position = await getPosition();
   const reverse = await reverseLabel(position.lat, position.lon);
   if (reverse?.inHslArea === false) {
-    throw new Error(
-      'Your current location is outside the HSL area. Type a starting point instead.',
-    );
+    throw new Error(t('geoOutside'));
   }
   const address = reverse?.label;
   return {
@@ -2420,9 +2787,9 @@ function buildDateOptions() {
     const option = document.createElement('option');
     option.value = date;
     if (index === 0) {
-      option.textContent = 'Today';
+      option.textContent = t('today');
     } else if (index === 1) {
-      option.textContent = 'Tomorrow';
+      option.textContent = t('tomorrowOption');
     } else {
       option.textContent = weekdayFormatter.format(dateToEpoch(date));
     }
@@ -2434,8 +2801,67 @@ function buildDateOptions() {
   }
 }
 
+const langButtons = Array.from(document.querySelectorAll('.lang-button'));
+
+function applySpeedLabels() {
+  for (const option of walkSpeedSelect.options) {
+    const match = SPEED_OPTIONS.find(([value]) => value === option.value);
+    if (match) option.textContent = `${t(match[1])} ${option.value} km/h`;
+  }
+}
+
+function applyStaticLanguage() {
+  document.documentElement.lang = lang;
+  for (const node of document.querySelectorAll('[data-i18n]')) {
+    node.textContent = t(node.dataset.i18n);
+  }
+  for (const node of document.querySelectorAll('[data-i18n-placeholder]')) {
+    node.placeholder = t(node.dataset.i18nPlaceholder);
+  }
+  for (const node of document.querySelectorAll('[data-i18n-title]')) {
+    node.title = t(node.dataset.i18nTitle);
+  }
+  for (const node of document.querySelectorAll('[data-i18n-aria-label]')) {
+    node.setAttribute('aria-label', t(node.dataset.i18nAriaLabel));
+  }
+}
+
+function updateLanguageButtons() {
+  for (const button of langButtons) {
+    const active = button.dataset.lang === lang;
+    button.classList.toggle('is-active', active);
+    button.setAttribute('aria-pressed', String(active));
+  }
+}
+
+function setLanguage(next) {
+  if (next !== 'fi' && next !== 'en') return;
+  lang = next;
+  try {
+    localStorage.setItem(LANG_STORAGE, next);
+  } catch {
+    // The chosen language still applies for this page.
+  }
+  weekdayFormatter = makeWeekdayFormatter(next);
+  applyStaticLanguage();
+  applySpeedLabels();
+  buildDateOptions();
+  updateLanguageButtons();
+  routeButton.textContent = t(busy ? 'routing' : 'route');
+  if (keyError && !keyError.hidden) keyError.textContent = t('keyRequired');
+  if (activeSearch && currentItineraries.length) renderItineraries(currentItineraries);
+  else updatePastWarning();
+}
+
+for (const button of langButtons) {
+  button.addEventListener('click', () => setLanguage(button.dataset.lang));
+}
+
+applyStaticLanguage();
+applySpeedLabels();
+updateLanguageButtons();
 buildDateOptions();
-timeInput.value = timeFormatter.format(new Date(Date.now() + 5 * 60 * 1000));
+timeInput.value = timeFormatter.format(new Date());
 
 function parseTimeValue(value) {
   const raw = String(value || '').trim();
@@ -2480,6 +2906,20 @@ function updatePastWarning() {
   timeInput.classList.toggle('is-past', timePast);
 }
 
+function timingLabel(date, time, arriveBy) {
+  if (!date || !time) return t('leavingNow');
+  const value = String(time).slice(0, 5);
+  const prefix = arriveBy ? t('arriveByPrefix') : t('departAtPrefix');
+  const today = todayDate();
+  let suffix = '';
+  if (date === addDays(today, 1)) {
+    suffix = ` ${t('tomorrowLabel')}`;
+  } else if (date !== today) {
+    suffix = ` ${t('onDatePrefix')}${weekdayFormatter.format(dateToEpoch(date))}`;
+  }
+  return `${prefix} ${value}${suffix}`;
+}
+
 function timeFieldError(message, field) {
   const error = new Error(message);
   error.field = field;
@@ -2488,38 +2928,30 @@ function timeFieldError(message, field) {
 
 function computeWhen(requireTime = true) {
   if (timeMode === 'now') {
-    return { date: null, time: null, arriveBy: false, label: 'leaving now', past: false };
+    return { date: null, time: null, arriveBy: false, label: t('leavingNow'), past: false };
   }
 
   const value = parseTimeValue(timeInput.value);
   if (!value) {
     if (!requireTime) return null;
-    throw timeFieldError('Enter a time as HH:MM, or switch to “Now”.', 'time');
+    throw timeFieldError(t('errorTimeFormat'), 'time');
   }
 
   const date = dateInput.value;
   if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
     if (!requireTime) return null;
-    throw timeFieldError('Choose a travel date.', 'date');
+    throw timeFieldError(t('errorChooseDate'), 'date');
   }
 
   const today = todayDate();
   const nowTime = timeFormatter.format(new Date());
   const past = date < today || (date === today && value < nowTime);
 
-  const modeLabel = timeMode === 'arrive' ? 'arrive by' : 'depart at';
-  let suffix = '';
-  if (date === addDays(today, 1)) {
-    suffix = ' tomorrow';
-  } else if (date !== today) {
-    suffix = ` on ${weekdayFormatter.format(dateToEpoch(date))}`;
-  }
-
   return {
     date,
     time: `${value}:00`,
     arriveBy: timeMode === 'arrive',
-    label: `${modeLabel} ${value}${suffix}`,
+    label: timingLabel(date, value, timeMode === 'arrive'),
     past,
   };
 }
@@ -2545,7 +2977,7 @@ function setTimeMode(mode, { focus = false, preserveTime = false } = {}) {
   if (previousMode === 'now' && !preserveTime) {
     const current = parseTimeValue(timeInput.value);
     if (dateInput.value === todayDate() && (!current || current <= timeFormatter.format(new Date()))) {
-      timeInput.value = timeFormatter.format(new Date(Date.now() + 5 * 60 * 1000));
+      timeInput.value = timeFormatter.format(new Date());
     }
   }
 
@@ -2634,7 +3066,7 @@ function filterItinerariesByModes(itineraries) {
 }
 
 optionsToggle.addEventListener('click', () => {
-  const open = optionsPanel.hidden;
+  const open = optionsToggle.getAttribute('aria-expanded') !== 'true';
   optionsPanel.hidden = !open;
   optionsToggle.setAttribute('aria-expanded', String(open));
 });
@@ -2689,7 +3121,7 @@ if (STANDALONE) {
     event.preventDefault();
     const value = keyInput.value.trim();
     if (!value) {
-      keyError.textContent = 'Paste your Digitransit subscription key.';
+      keyError.textContent = t('keyRequired');
       keyError.hidden = false;
       keyInput.focus();
       return;
@@ -2709,7 +3141,7 @@ if (STANDALONE) {
 function setBusy(value) {
   busy = value;
   routeButton.disabled = value;
-  routeButton.textContent = value ? 'Routing…' : 'Route';
+  routeButton.textContent = t(value ? 'routing' : 'route');
   form.setAttribute('aria-busy', String(value));
   fromField.input.readOnly = value;
   toField.input.readOnly = value;
@@ -2917,7 +3349,7 @@ function createField({ root, input, list, getFocus }) {
 
       const results = await geocodePlaces(text, getFocus() || HELSINKI_CENTER);
       if (!results.length) {
-        throw new Error(`Couldn't find “${text}” in the HSL area. Try a more specific address.`);
+        throw new Error(t('notFound', text));
       }
       const best = results[0];
       selected = best;
@@ -2957,25 +3389,25 @@ document.addEventListener('pointerdown', (event) => {
 
 function liveBadge(withLabel) {
   const node = el('span', 'live');
-  node.title = 'Includes real-time data';
-  node.setAttribute('aria-label', 'Real-time data');
+  node.title = t('liveTitle');
+  node.setAttribute('aria-label', t('liveAria'));
   node.append(el('span', 'live-dot'));
-  if (withLabel) node.append(document.createTextNode('Live'));
+  if (withLabel) node.append(document.createTextNode(t('liveLabel')));
   return node;
 }
 
 function renderWalkDetail(leg) {
   const target = leg.to?.name;
-  const destination = !target || target === 'Destination' ? 'destination' : target;
   const distance = Number(leg.distance) > 20 ? ` · ${formatDistance(leg.distance)}` : '';
-  return `to ${destination}${distance}`;
+  if (!target || target === 'Destination') return `${t('walkToDestination')}${distance}`;
+  return `${t('walkTo', target)}${distance}`;
 }
 
 function renderTransitDetail(leg) {
-  const from = leg.from?.name || 'Stop';
-  const to = leg.to?.name || 'Stop';
+  const from = leg.from?.name || t('stopFallback');
+  const to = leg.to?.name || t('stopFallback');
   const platform = leg.from?.stop?.platformCode;
-  return `${from}${platform ? ` (platform ${platform})` : ''} → ${to}`;
+  return `${from}${platform ? t('platform', platform) : ''} → ${to}`;
 }
 
 function renderStep(leg) {
@@ -2988,7 +3420,7 @@ function renderStep(leg) {
     const circle = el('span', 'walk-marker');
     circle.append(icon('icon-walk'));
     marker.append(circle);
-    body.append(el('div', 'step-title', 'Walk'), el('div', 'step-detail', renderWalkDetail(leg)));
+    body.append(el('div', 'step-title', t('walk')), el('div', 'step-detail', renderWalkDetail(leg)));
   } else {
     const mode = leg.route?.mode || leg.mode;
     const info = modeInfo(mode);
@@ -3020,7 +3452,7 @@ function renderWaitRow(seconds, stopName) {
   step.append(el('span', 'step-marker'));
   const body = el('div', 'step-body');
   body.append(
-    el('div', 'step-detail', `Wait ${formatDuration(seconds)}${stopName ? ` at ${stopName}` : ''}`),
+    el('div', 'step-detail', t('waitAt', formatDuration(seconds), stopName)),
   );
   step.append(body);
   return step;
@@ -3028,10 +3460,6 @@ function renderWaitRow(seconds, stopName) {
 
 function renderItinerary(itinerary) {
   const legs = Array.isArray(itinerary.legs) ? itinerary.legs : [];
-  const transitLegs = legs.filter((leg) => leg.transitLeg);
-  const walkSeconds = legs
-    .filter((leg) => leg.mode === 'WALK')
-    .reduce((total, leg) => total + Number(leg.duration || 0), 0);
 
   const card = el('article', 'itinerary');
   card.dataset.key = itineraryKey(itinerary);
@@ -3048,25 +3476,19 @@ function renderItinerary(itinerary) {
   );
   head.append(times);
 
-  const meta = el('p', 'itinerary-meta');
-  let accessText = 'Walk only';
-  if (transitLegs.length === 1) {
-    accessText = 'Direct';
-  } else if (transitLegs.length > 1) {
-    const transfers = transitLegs.length - 1;
-    accessText = `${transfers} transfer${transfers === 1 ? '' : 's'}`;
-  }
-  const parts = [];
   const dayLabel = relativeDayLabel(itinerary.startTime);
-  if (dayLabel) parts.push(dayLabel);
-  parts.push(accessText);
-  if (walkSeconds >= 30) parts.push(`${formatDuration(walkSeconds)} walking`);
-  meta.append(document.createTextNode(parts.join(' · ')));
-  if (legs.some((leg) => leg.realTime)) {
-    meta.append(document.createTextNode(' '), el('span', 'meta-dot'), liveBadge(true));
+  const hasLive = legs.some((leg) => leg.realTime);
+  if (dayLabel || hasLive) {
+    const meta = el('p', 'itinerary-meta');
+    if (dayLabel) meta.append(document.createTextNode(dayLabel));
+    if (hasLive) {
+      if (dayLabel) meta.append(document.createTextNode(' '), el('span', 'meta-dot'));
+      meta.append(liveBadge(true));
+    }
+    head.append(meta);
   }
 
-  head.append(meta, el('div', 'itinerary-duration', formatDuration(itinerary.duration)));
+  head.append(el('div', 'itinerary-duration', formatDuration(itinerary.duration)));
   card.append(head);
 
   const steps = el('ol', 'steps');
@@ -3100,10 +3522,10 @@ function renderPager(position) {
     const button = el('button', 'pager-button');
     button.type = 'button';
     button.dataset.direction = direction;
-    const verb = direction === 'earlier' ? 'Show earlier departures' : 'Show later departures';
+    const verb = direction === 'earlier' ? t('earlierAria') : t('laterAria');
     button.setAttribute(
       'aria-label',
-      position === 'bottom' ? `${verb} at the end of the list` : verb,
+      position === 'bottom' ? t('atEnd', verb) : verb,
     );
     pager.append(button);
   }
@@ -3116,10 +3538,9 @@ function updatePagerButtons() {
     const exhausted = pagingExhausted[direction];
     button.disabled = paging || exhausted;
     if (exhausted) {
-      button.textContent = direction === 'earlier' ? 'No earlier departures' : 'No later departures';
+      button.textContent = direction === 'earlier' ? t('noEarlier') : t('noLater');
     } else {
-      button.textContent =
-        direction === 'earlier' ? '← Show earlier departures' : 'Show later departures →';
+      button.textContent = direction === 'earlier' ? t('showEarlier') : t('showLater');
     }
   }
 }
@@ -3128,24 +3549,23 @@ function renderItineraries(itineraries, { focusKey = null } = {}) {
   const visible = filterItinerariesByModes(itineraries);
   if (!visible.length) {
     resultsBox.hidden = true;
-    showStatus(
-      'No routes match the selected transit modes. Enable another mode or press Route.',
-      'info',
-    );
+    showStatus(t('noModeMatch'), 'info');
     return;
   }
 
   resultsBox.replaceChildren();
 
-  const queryLabel = activeSearch?.label || 'leaving now';
+  const queryLabel = activeSearch?.timing
+    ? timingLabel(
+        activeSearch.timing.date,
+        activeSearch.timing.time,
+        activeSearch.timing.arriveBy,
+      )
+    : t('leavingNow');
   const head = el('div', 'results-head');
   head.append(
-    el('h2', 'visually-hidden', 'Routes'),
-    el(
-      'span',
-      'results-meta',
-      `${visible.length} ${visible.length === 1 ? 'option' : 'options'} · ${queryLabel}`,
-    ),
+    el('h2', 'visually-hidden', t('resultsRoutes')),
+    el('span', 'results-meta', `${t('optionsCount', visible.length)} · ${queryLabel}`),
   );
 
   const list = el('div', 'itinerary-list');
@@ -3283,7 +3703,7 @@ async function submitSearch() {
   if (!toField.getText() && !toField.getSelection()) {
     toField.setInvalid(true);
     toField.input.focus();
-    showError('Enter where you want to go.');
+    showError(t('enterDestination'));
     return;
   }
 
@@ -3308,7 +3728,7 @@ async function submitSearch() {
 
   if (STANDALONE && !apiKey) {
     openKeyDialog();
-    showError('Add your Digitransit API key to search.');
+    showError(t('addApiKey'));
     return;
   }
 
@@ -3320,7 +3740,7 @@ async function submitSearch() {
 
   try {
     showStatus(
-      fromField.getText() ? 'Finding locations…' : 'Getting your location…',
+      fromField.getText() ? t('findingLocations') : t('gettingLocation'),
       'loading',
     );
 
@@ -3342,7 +3762,7 @@ async function submitSearch() {
         const existing = toField.getSelection();
         if (existing) return existing;
         const resolved = await toField.resolve();
-        if (!resolved) throw new Error('Enter where you want to go.');
+        if (!resolved) throw new Error(t('enterDestination'));
         return resolved;
       })().catch((error) => {
         error.field = 'to';
@@ -3351,7 +3771,7 @@ async function submitSearch() {
     ]);
     if (id !== runId) return;
 
-    showStatus('Planning route…', 'loading');
+    showStatus(t('planningRoute'), 'loading');
     const options = getSearchOptions();
     const data = await requestPlan(from, to, when, options);
     if (id !== runId) return;
@@ -3360,10 +3780,7 @@ async function submitSearch() {
       .slice()
       .sort((a, b) => Number(a.startTime) - Number(b.startTime));
     if (!itineraries.length) {
-      showStatus(
-        'No routes found for this trip. Try a nearby address or a different time.',
-        'info',
-      );
+      showStatus(t('noRoutesFound'), 'info');
       return;
     }
 
@@ -3371,7 +3788,7 @@ async function submitSearch() {
       from,
       to,
       arriveBy: Boolean(when.arriveBy),
-      label: when.label,
+      timing: when,
       options,
     };
     currentItineraries = itineraries;
@@ -3401,7 +3818,7 @@ form.addEventListener('submit', (event) => {
 locateButton.addEventListener('click', async () => {
   if (busy || locateButton.disabled) return;
   locateButton.disabled = true;
-  showStatus('Getting your location…', 'loading');
+  showStatus(t('gettingLocation'), 'loading');
   try {
     const selection = await locateSelection();
     fromField.setSelection(selection);
