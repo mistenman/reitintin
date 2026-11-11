@@ -208,21 +208,36 @@ h1 {
 
 .field {
   position: relative;
+  display: grid;
+  grid-template-columns: 14px minmax(0, 1fr);
+  column-gap: 6px;
+  align-items: center;
+  --label-gutter: 20px;
   min-width: 0;
 }
 
 .field label {
   display: block;
-  margin: 0 0 3px 2px;
+  max-height: 44px;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
   color: var(--muted);
   font-size: 11px;
   font-weight: 650;
   letter-spacing: 0.02em;
+  line-height: 1;
   text-transform: uppercase;
+  white-space: nowrap;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  justify-self: center;
+  align-self: center;
 }
 
 .input-wrap {
   position: relative;
+  min-width: 0;
 }
 
 .field input {
@@ -717,7 +732,7 @@ h1 {
 .suggestions {
   position: absolute;
   top: calc(100% + 4px);
-  left: 0;
+  left: var(--label-gutter);
   right: 0;
   z-index: 30;
   max-height: 280px;
@@ -1173,22 +1188,11 @@ h1 {
   font-weight: 700;
 }
 
-.key-copy,
 .key-help {
   margin: 0 0 10px;
   color: var(--muted);
   font-size: 12.5px;
   line-height: 1.45;
-}
-
-.key-dialog label {
-  display: block;
-  margin: 0 0 4px 2px;
-  color: var(--muted);
-  font-size: 11px;
-  font-weight: 650;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
 }
 
 #key-input {
@@ -1374,10 +1378,6 @@ h1 {
   .results-head .pager {
     width: 100%;
     margin: 2px 0 0;
-  }
-
-  .results-head .pager-button {
-    min-height: 44px;
   }
 
   .pager {
@@ -1699,30 +1699,27 @@ h1 {
     <dialog id="key-dialog" class="key-dialog" aria-labelledby="key-title">
       <form id="key-form" novalidate>
         <h2 id="key-title">Digitransit API key</h2>
-        <p class="key-copy">
-          This standalone copy calls Digitransit directly from your browser. Paste your
-          subscription key; it is stored only in this browser.
+        <p id="key-help" class="key-help">
+          Create a key at
+          <a href="https://portal-api.digitransit.fi/" target="_blank" rel="noreferrer">
+            portal-api.digitransit.fi
+          </a>.
         </p>
-        <label for="key-input">API key</label>
         <input
           id="key-input"
           type="text"
           autocomplete="off"
           autocapitalize="off"
           spellcheck="false"
-          placeholder="digitransit-subscription-key"
+          placeholder="Paste API key here"
+          aria-label="API key"
+          aria-describedby="key-help"
         />
         <p id="key-error" class="key-error" role="alert" hidden></p>
         <div class="key-actions">
           <button type="button" id="key-cancel" class="key-cancel">Cancel</button>
           <button type="submit" class="key-save">Save key</button>
         </div>
-        <p class="key-help">
-          Create a key at
-          <a href="https://portal-api.digitransit.fi/" target="_blank" rel="noreferrer">
-            portal-api.digitransit.fi
-          </a>.
-        </p>
       </form>
     </dialog>
 
